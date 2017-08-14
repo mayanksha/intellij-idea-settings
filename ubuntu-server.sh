@@ -3,6 +3,14 @@ sudo apt -y upgrade
 sudo apt -y update
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt-get install -y nodejs vim-gnome npm git
+
+
+#------------------Fix npm Permissions (change global dir)------------------
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH
+source ~/.profile
+
 git config --global user.name "Mayank Sharma"
 git config --global user.email "msharma@iitk.ac.in"
 git config --global core.editor vim -w
@@ -23,3 +31,8 @@ cp ./.bashrc ~/.bashrc
 cd ~/.vim/bundle/YouCompleteMe
 sudo apt-get install build-essential cmake python-dev python3-dev
 ./install.py --tern-completer
+
+
+#------------------Nginx Installation------------------
+
+apt-get install -y nginx
