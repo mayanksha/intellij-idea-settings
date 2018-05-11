@@ -1,22 +1,23 @@
 #!/bin/bash
 sudo apt -y upgrade
 sudo apt -y update
-#curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-#sudo apt-get install -y nodejs npm git
 sudo apt-get install -y vim-gnome
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+#sudo apt-get install -y nodejs npm git
 
 #------------------Fix npm Permissions (change global dir)------------------
-#mkdir ~/.npm-global
-#npm config set prefix '~/.npm-global'
-#export PATH=~/.npm-global/bin:$PATH
-#source ~/.profile
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH
+source ~/.profile
 
 sudo apt-get install -y git
 git config --global user.name "Mayank Sharma"
 git config --global user.email "msharma@iitk.ac.in"
 git config --global core.editor vim -w
-#sudo npm update -g npm
+sudo npm update -g npm
 #sudo npm install @angular/cli express typescript @angular/common @angular/core
+
 git clone https://github.com/mayanksha/vimrc.git
 cd vimrc
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -29,16 +30,23 @@ cp ./.bashrc ~/.bashrc
 
 #------------------YouCompleteMe------------------
 
+curr_dir=($(pwd))
 cd ~/.vim/bundle/YouCompleteMe
 sudo apt-get install build-essential cmake python-dev python3-dev
 ./install.py --tern-completer
-
+cd curr_dir
 
 #------------------Terminator Installation------------------
 sudo add-apt-repository ppa:gnome-terminator
 sudo apt-get update
 sudo apt-get install terminator
 
+if [ -d "~/.config/terminator" ] then
+	cp ./terminator/config ~/.config/terminator
+else
+	mkdir ~/.config/terminator
+	cp ./terminator/config ~/.config/terminator
+fi
 
 #------------------Gnome Settings Installation------------------
 bash ./gnome_settings.sh
