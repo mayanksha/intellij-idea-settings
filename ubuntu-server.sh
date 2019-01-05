@@ -3,7 +3,8 @@ sudo apt -y upgrade
 sudo apt -y update
 sudo apt-get install -y vim-gnome
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-#sudo apt-get install -y nodejs npm git
+sudo apt-get install -y aptitude
+sudo aptitude install -y nodejs npm
 
 #------------------Fix npm Permissions (change global dir)------------------
 mkdir ~/.npm-global
@@ -34,7 +35,7 @@ curr_dir=($(pwd))
 cd ~/.vim/bundle/YouCompleteMe
 sudo apt-get install build-essential cmake python-dev python3-dev
 ./install.py --tern-completer
-cd curr_dir
+cd $curr_dir
 
 #------------------Terminator Installation------------------
 sudo add-apt-repository ppa:gnome-terminator
@@ -48,6 +49,14 @@ else
 	cp ./terminator/config ~/.config/terminator
 fi
 
+#-------------------------- Nginx Installation------------------
+apt-get install -y nginx
+sudo ufw allow 'Nginx Full'
+sudo ufw allow 'OpenSSH'
+
+
+#-------------------------- MySQL Installation------------------
+sudo apt-get install mysql-server
 #------------------Gnome Settings Installation------------------
 bash ./gnome_settings.sh
 
@@ -55,3 +64,4 @@ bash ./gnome_settings.sh
 git clone https://github.com/gTile/gTile.git ~/.local/share/gnome-shell/extensions/gTile@vibou
 #Pixel Saver, system-monitor, mmod-Panel, alternate tab, panelSettings
 #apt-get install -y nginx
+sudo mysql_secure_installation

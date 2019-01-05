@@ -12,9 +12,9 @@ PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
 #***********************************ALIASES***********************************
 alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
-alias k='cd ..'
-alias kk='cd ../..'
-alias kkk='cd ../../..'
+alias k='cd .. && ls'
+alias kk='cd ../.. && ls'
+alias kkk='cd ../../.. && ls'
 alias la='ls -la'
 #alias pac="pacman -S"
 alias pac="pac"
@@ -59,18 +59,11 @@ export HOME="/home/${USER}/"
 export PROMPT_DIRTRIM=3
 export LFS="/mnt/lfs"
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:~/.local/bin:/bin/:/home/msharma/MATLAB/R2016b/bin:/opt/cuda/bin
+export PATH=~/.npm-global/bin:$PATH
 #NVM specific node binary path
-export PATH=$PATH:~/.nvm/versions/node/v9.2.0/bin
+#export PATH=$PATH:~/.nvm/versions/node/v9.2.0/bin
 export CLOUD="codermayank@139.59.76.36"
 export J2D_D3D=false
-
-
-#export NVM_DIR="$HOME.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-export PKG_CONFIG_PATH
-PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-export PKG_CONFIG_PATH
-PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
-export PKG_CONFIG_PATH
+	
+export AWS_PROFILE=testing
+export GOOGLE_APPLICATION_CREDENTIALS="/home/msharma/.ssh/sheets.json"
