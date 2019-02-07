@@ -12,6 +12,9 @@ UUID=22DA-1306 /boot vfat defaults,errors=remount-ro,noatime 0 1
 UUID=644211c4-f8bc-43be-9c27-6371054063e4 /home ext4 errors=remount-ro,noatime 0 1
 UUID=40f7285f-571b-4cc6-ad64-306839dc9f1b /var ext4 errors=remount-ro 0 1
 
+#Swap disk -- /dev/sda5
+UUID=8ce9c822-6896-48cb-8a91-c1c66b19e2ef swap swap defaults 0 0
+
 UUID=a870bf7a-5be6-433b-ba40-80944afd53e1 /mnt/ubuntu ext4 defaults 0 2
 #/dev/sda6 -- C Drive
 UUID=7ACED613CED5C791 /mnt/c  ntfs-3g defaults 0 2

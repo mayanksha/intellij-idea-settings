@@ -18,21 +18,24 @@
 	vnoremap C :call NERDComment('x', 'NormalToggle')<CR>
 "nmap <Leader> <leader>c<space>
 	noremap <NUL> :bn<CR>
-nnoremap <F2> :bd<CR>
-nnoremap <C-e> :call CloseBufWithoutClosingNetrw()<CR>
+	nnoremap <C-B> :bp<CR>
+	nnoremap <F2> :bd<CR>
+	nnoremap <C-e> :call CloseBufWithoutClosingNetrw()<CR>
 " Use ctrl-[hjkl] to select the active split!
 	nmap <silent> <c-k> :wincmd k<CR>
 "nmap <silent> <c-j> :wincmd j<CR>
 	nmap <silent> <c-h> :wincmd h<CR>
 	nmap <silent> <c-l> :wincmd l<CR>
-"Toggle Netrw using Ctrl + J
-	map <silent> <C-j> :call ToggleVExplorer()<CR>
 "Code Folding in VIM
 	inoremap <F3> <C-O>za
 	nnoremap <F3> za
 	onoremap <F3> <C-C>za
 	vnoremap <F3> zf
 	vnoremap <F6> zM
+
+	map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+	map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
 "Remap + and 0 for going to first non-whitespace character
 	nnoremap ^ 0
 	nnoremap 0 ^
@@ -42,6 +45,7 @@ nnoremap <C-e> :call CloseBufWithoutClosingNetrw()<CR>
 	vnoremap <silent> <Plug>VSurround  :<C-U>call <SID>opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>
 	xnoremap <silent> <M-"> :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>"
 	xnoremap <silent> [ :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>]
+	xnoremap <silent> 4 :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>$
 	xnoremap <silent> ' :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>'
 	xnoremap <silent> ( :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>)
 	xnoremap <silent> { :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>}
@@ -87,7 +91,7 @@ vnoremap <silent> # :<C-U>
 	Plugin 'scrooloose/NERDCommenter'
 	Plugin 'Quramy/vim-js-pretty-template'
 	"Plugin 'severin-lemaignan/vim-minimap'
-	Plugin 'lervag/vimtex' 
+	"Plugin 'lervag/vimtex' 
 	Plugin 'vim-scripts/Conque-GDB'
 	Plugin 'vim-utils/vim-man'
 	Plugin 'leafgarland/typescript-vim'
@@ -95,35 +99,28 @@ vnoremap <silent> # :<C-U>
 	Plugin 'pangloss/vim-javascript'
 	Plugin 'mxw/vim-jsx'
 	Plugin 'mattn/emmet-vim'
-	Plugin 'metakirby5/codi.vim'
 	Plugin 'w0rp/ale'
+	Plugin 'suan/vim-instant-markdown'
+	Plugin 'metakirby5/codi.vim'
+	Plugin 'fatih/vim-go'
 	" All of your Plugins must be added before the following line
 	call vundle#end()            " required
 	filetype plugin indent on    " required
 
-	" To ignore plugin indent changes, instead use:
-	"filetype plugin on
 
 "*************** Set commands ***************
 "
 	packadd! matchit
 	syntax enable
-	"set background=dark
-	"set termguicolors
-	"let g:quantum_dark = 1
-	"colorscheme monokai
-	"colorscheme basic-dark
-	"colorscheme quantum 
-	"colorscheme jellybeans
-	set relativenumber
+	"set relativenumber
 	let g:neodark#background = '#232227'
 	colorscheme neodark
 	set t_Co=256
-	set tabstop=4	"Tab is four spaces
+	set tabstop=2	"Tab is four spaces
 	set autoindent	"Autoindenting always on
 	set copyindent	"Copy Previous indent on autoindenting
 	set number
-	set shiftwidth=4	"Number of spaces to use for autoindenting
+	set shiftwidth=2	"Number of spaces to use for autoindenting
 	set showmatch	"Show matching parenthesis
 	set smarttab	"insert tabs on the start of a line according to shiftwidth, not tabstop
 	set hlsearch	"highligh search terms
@@ -141,26 +138,25 @@ vnoremap <silent> # :<C-U>
 	set cursorline
 	set hidden	
 	set splitbelow
-	setlocal foldmethod=manual
+	set foldmethod=indent
+	set foldnestmax=2
 	"set listchars=tab:\¦\ 
 
 "*************** Custom Mappings ***************
 "
 
 filetype plugin indent on	"Turns the filetype plugin on
-"autocmd vimenter * NERDTree
-"autocmd vimenter * wincmd p	"Changes the focus from NERDTree to Opened File
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif	"Closes the last remainig NERDTree split window
 "autocmd FileType html set omnifunc=htmlcomplete#CompleteTags	"Autocompletes HTML tags
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType typescript,html setlocal shiftwidth=2 tabstop=2 
 
-autocmd FileType cpp set keywordprg=cppman
+autocmd FileType c,cpp set keywordprg=cppman
 autocmd FileType c,cpp nmap <F4> :YcmCompleter FixIt<CR>
 autocmd FileType javascript,typescript nmap <F4> :ALEFix <CR>
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript JsPreTmpl markdown
 autocmd FileType typescript JsPreTmpl markdown
+autocmd BufReadPost  *.js  nnoremap <buffer> K :TernDoc<CR>
 "autocmd FileType typescript syn clear foldBraces 
 
 autocmd FileType tex setlocal 
@@ -173,27 +169,38 @@ au BufRead,BufNewFile *.ts  setlocal filetype=typescript
 
 
 "*************** let commands ***************
-"
-"
+" Vim-Instant-Markdown 
+
+let g:instant_markdown_open_to_the_world = 0
+let g:instant_markdown_autostart = 0
+
+" TernJS Configuration
+let g:tern_show_argument_hints = 'never'
+let g:tern_show_signature_in_pum = 1
 " ale configuration for linting
 	
 let g:ale_completion_enabled = 1
 let g:airline#extensions#ale#enabled = 1
 "let g:ale_fix_on_save = 1
 let g:ale_linters = {
-\   'javascript': ['eslint'],
-\	'typescript': ['tslint']
+\   'javascript': ['jshint'],
+\		'typescript': ['tslint'],
+\		'latex': []
 \}
 let g:ale_fixers = {
 \   'typescript': ['tslint'],
+\   'javascript': ['eslint'],
 \}
-let g:ale_linters_explicit = 1
+"let g:ale_linters_explicit = 1
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.php,*.js"
 let g:user_emmet_settings = {
   \  'javascript.jsx' : {
     \      'extends' : 'jsx',
     \  },
   \}
+
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
 let g:pymode_python = 'python3'
 highlight ALEError ctermbg=Brown ctermfg=White
 
@@ -210,7 +217,6 @@ let g:ycm_min_num_identifier_candidate_chars = 5
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 let g:ycm_python_binary_path = '/usr/bin/python3'
 let g:ycm_always_populate_location_list = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_semantic_triggers =  {
   \   'c' : ['->', '.','re![_a-zA-Z0-9]'],
   \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
@@ -225,10 +231,10 @@ let g:ycm_semantic_triggers =  {
   \   'erlang' : [':'],
   \ }
 
-let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+"let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 "YCM Disabled on python
 "let g:ycm_filetype_specific_completion_to_disable = { 'python' : 1 }
-"let g:ycm_filetype_blacklist = { 'python' : 1 }
+let g:ycm_filetype_blacklist = { 'markdown' : 0 }
 
 let g:typescript_compiler_binary = 'tsc'
 "let g:typescript_compiler_options = ''
@@ -250,6 +256,19 @@ if !exists('g:airline_symbols')
 endif
 
 " unicode symbols
+"let g:airline_left_sep = '»'
+"let g:airline_left_sep = '▶'
+"let g:airline_right_sep = '«'
+"let g:airline_right_sep = '◀'
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
+"let g:airline_symbols.linenr = '¶'
+"let g:airline_symbols.branch = '⎇'
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.paste = 'Þ'
+"let g:airline_symbols.paste = '∥'
+"let g:airline_symbols.whitespace = 'Ξ'
+
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
@@ -258,10 +277,10 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-	let g:airline#extensions#tabline#left_sep = ''
-	let g:airline#extensions#tabline#left_alt_sep = ''
-	let g:airline#extensions#tabline#right_sep = ''
-	let g:airline#extensions#tabline#right_alt_sep = ''
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+let g:airline#extensions#tabline#right_sep = ''
+let g:airline#extensions#tabline#right_alt_sep = ''
 
 	let g:airline_theme='wombat'
 
@@ -297,43 +316,9 @@ augroup ProjectDrawer
 	autocmd!
 	"autocmd VimEnter * Vexplore 
 	"autocmd VimEnter * wincmd p
-	autocmd VimEnter * command W wq | q!
+	"autocmd VimEnter * command W wq | q!
 	"autocmd VimEnter * command W! wq! | q!
 	"autocmd VimEnter * command Q! q! | q!
 	autocmd VimEnter * command Q q | q!
 augroup END
 
-"autocmd bufenter * if(winnr("$") == 1 && exists(":Vexplore") && bufwinnr("NetrwTreeListing 1"))  | q | endif																			
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif	"Closes the last remainig NERDTree split window
-"
-
-"*************** Custom Functions  ***************
-
-function CloseBufWithoutClosingNetrw()
-	:bd
-	:bd
-	:Vexplore
-	:wincmd l
-endfunction
-
-function! ToggleVExplorer()
-	if exists("t:expl_buf_num")
-		let expl_win_num = bufwinnr(t:expl_buf_num)
-		if expl_win_num != -1
-			let cur_win_nr = winnr()
-			exec expl_win_num . 'wincmd w'
-			close
-			exec cur_win_nr . 'wincmd w'
-			unlet t:expl_buf_num
-		else
-			unlet t:expl_buf_num
-		endif
-	else
-		exec '1wincmd w'
-		Vexplore
-		"Below is a bug in Netrw changing the hidden value to nohidden, being
-		"tracked here : https://github.com/vim/vim/issues/2408 
-		set hidden
-		let t:expl_buf_num = bufnr("%")
-	endif
-endfunction

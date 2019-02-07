@@ -16,6 +16,10 @@ sudo apt-get install -y git
 git config --global user.name "Mayank Sharma"
 git config --global user.email "msharma@iitk.ac.in"
 git config --global core.editor vim -w
+# Set vimdiff as default difftool
+git config --global diff.tool vimdiff
+git config --global difftool.prompt false
+git config --global alias.d difftool
 sudo npm update -g npm
 #sudo npm install @angular/cli express typescript @angular/common @angular/core
 

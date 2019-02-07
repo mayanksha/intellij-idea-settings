@@ -9,4 +9,3 @@ else
 	echo "[MultiMonitorScript] Single Monitor Setup Detected" | systemd-cat
 	xrandr --output eDP1 --mode 1920x1080 --pos 0x0 --rotate normal --scale 1x1
 fi
-
