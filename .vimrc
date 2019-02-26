@@ -43,12 +43,12 @@
 	map w e
 "Vim Surround mappings
 	vnoremap <silent> <Plug>VSurround  :<C-U>call <SID>opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>
-	xnoremap <silent> <M-"> :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>"
-	xnoremap <silent> [ :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>]
-	xnoremap <silent> 4 :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>$
-	xnoremap <silent> ' :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>'
-	xnoremap <silent> ( :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>)
-	xnoremap <silent> { :call <SNR>29_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>}
+	xnoremap <silent> <M-"> :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>"
+	xnoremap <silent> [ :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>]
+	xnoremap <silent> 4 :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>$
+	xnoremap <silent> ' :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>'
+	xnoremap <silent> ( :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>)
+	xnoremap <silent> { :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>}
 "Delete Surrounding Pairs
 	nnoremap <C-x> %x``x
 	xnoremap <C-x> %x``x
@@ -103,6 +103,7 @@ vnoremap <silent> # :<C-U>
 	Plugin 'suan/vim-instant-markdown'
 	Plugin 'metakirby5/codi.vim'
 	Plugin 'fatih/vim-go'
+	Plugin 'tomlion/vim-solidity'
 	" All of your Plugins must be added before the following line
 	call vundle#end()            " required
 	filetype plugin indent on    " required
@@ -150,8 +151,10 @@ filetype plugin indent on	"Turns the filetype plugin on
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType typescript,html setlocal shiftwidth=2 tabstop=2 
 
+autocmd FileType go set foldmethod=manual
 autocmd FileType c,cpp set keywordprg=cppman
 autocmd FileType c,cpp nmap <F4> :YcmCompleter FixIt<CR>
+autocmd FileType javascript.jsx ALEDisable 
 autocmd FileType javascript,typescript nmap <F4> :ALEFix <CR>
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType javascript JsPreTmpl markdown
@@ -184,11 +187,11 @@ let g:airline#extensions#ale#enabled = 1
 "let g:ale_fix_on_save = 1
 let g:ale_linters = {
 \   'javascript': ['jshint'],
-\		'typescript': ['tslint'],
+\		'typescript': ['standard'],
 \		'latex': []
 \}
 let g:ale_fixers = {
-\   'typescript': ['tslint'],
+\   'typescript': ['standard'],
 \   'javascript': ['eslint'],
 \}
 "let g:ale_linters_explicit = 1
@@ -313,8 +316,6 @@ let g:netrw_list_hide= '.*\.swp$'
 
 "Automatically open Vexplore at startup and shift focus
 augroup ProjectDrawer
-	autocmd!
-	"autocmd VimEnter * Vexplore 
 	"autocmd VimEnter * wincmd p
 	"autocmd VimEnter * command W wq | q!
 	"autocmd VimEnter * command W! wq! | q!
