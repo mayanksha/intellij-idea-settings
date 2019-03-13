@@ -12,8 +12,8 @@ UUID=22DA-1306 /boot vfat defaults,errors=remount-ro,noatime 0 1
 UUID=644211c4-f8bc-43be-9c27-6371054063e4 /home ext4 errors=remount-ro,noatime 0 1
 UUID=40f7285f-571b-4cc6-ad64-306839dc9f1b /var ext4 errors=remount-ro 0 1
 
-#Swap disk -- /dev/sda5
-UUID=8ce9c822-6896-48cb-8a91-c1c66b19e2ef swap swap defaults 0 0
+#Swap disk -- /dev/sda4
+/dev/sda4 swap swap defaults 0 2
 
 UUID=a870bf7a-5be6-433b-ba40-80944afd53e1 /mnt/ubuntu ext4 defaults 0 2
 #/dev/sda6 -- C Drive
@@ -24,3 +24,4 @@ UUID=C8F80C97F80C85C2 /mnt/d  ntfs-3g defaults,uid=1000,rw 0 2
 #Downloads folder (/dev/sda1)
 UUID=f8529031-e539-49a8-a4c8-3c2a6f8df4bd /mnt/data ext4 defaults 0 1
 
+/home/msharma/ /mnt/ubuntu/home/msharma/ none rw,rbind 0 0
