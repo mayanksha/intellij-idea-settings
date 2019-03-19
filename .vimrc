@@ -39,16 +39,19 @@
 "Remap + and 0 for going to first non-whitespace character
 	nnoremap ^ 0
 	nnoremap 0 ^
+
+"Save with sudo
+	command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 "Map move to end of word to w
 	map w e
 "Vim Surround mappings
 	vnoremap <silent> <Plug>VSurround  :<C-U>call <SID>opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>
-	xnoremap <silent> <M-"> :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>"
-	xnoremap <silent> [ :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>]
-	xnoremap <silent> 4 :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>$
-	xnoremap <silent> ' :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>'
-	xnoremap <silent> ( :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>)
-	xnoremap <silent> { :call <SNR>31_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>}
+	xnoremap <silent> <M-"> :call <SNR>34_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>"
+	xnoremap <silent> [ :call <SNR>34_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>]
+	xnoremap <silent> 4 :call <SNR>34_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>$
+	xnoremap <silent> ' :call <SNR>34_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>'
+	xnoremap <silent> ( :call <SNR>34_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>)
+	xnoremap <silent> { :call <SNR>34_opfunc(visualmode(),visualmode() ==# 'V' ? 1 : 0)<CR>}
 "Delete Surrounding Pairs
 	nnoremap <C-x> %x``x
 	xnoremap <C-x> %x``x
@@ -75,6 +78,7 @@ vnoremap <silent> # :<C-U>
 	set rtp+=~/.vim/bundle/Vundle.vim
 	call vundle#begin()
 	Plugin 'VundleVim/Vundle.vim'
+	Plugin 'ctrlpvim/ctrlp.vim'
 	"Plugin 'tyrannicaltoucan/vim-quantum.git'
 	Plugin 'jiangmiao/auto-pairs'
 	"Plugin 'Quramy/tsuquyomi'
@@ -103,7 +107,9 @@ vnoremap <silent> # :<C-U>
 	Plugin 'suan/vim-instant-markdown'
 	Plugin 'metakirby5/codi.vim'
 	Plugin 'fatih/vim-go'
+	Plugin 'stamblerre/gocode', {'rtp': 'vim/'}
 	Plugin 'tomlion/vim-solidity'
+	Plugin 'davidhalter/jedi-vim'
 	" All of your Plugins must be added before the following line
 	call vundle#end()            " required
 	filetype plugin indent on    " required
@@ -117,11 +123,11 @@ vnoremap <silent> # :<C-U>
 	let g:neodark#background = '#232227'
 	colorscheme neodark
 	set t_Co=256
-	set tabstop=2	"Tab is four spaces
+	set tabstop=4	
 	set autoindent	"Autoindenting always on
 	set copyindent	"Copy Previous indent on autoindenting
 	set number
-	set shiftwidth=2	"Number of spaces to use for autoindenting
+	set shiftwidth=4	"Number of spaces to use for autoindenting
 	set showmatch	"Show matching parenthesis
 	set smarttab	"insert tabs on the start of a line according to shiftwidth, not tabstop
 	set hlsearch	"highligh search terms
@@ -141,7 +147,12 @@ vnoremap <silent> # :<C-U>
 	set splitbelow
 	set foldmethod=indent
 	set foldnestmax=2
+	set wildmenu 
 	"set listchars=tab:\¦\ 
+	set shortmess+=c
+	set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+	set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+
 
 "*************** Custom Mappings ***************
 "
@@ -149,9 +160,10 @@ vnoremap <silent> # :<C-U>
 filetype plugin indent on	"Turns the filetype plugin on
 "autocmd FileType html set omnifunc=htmlcomplete#CompleteTags	"Autocompletes HTML tags
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType typescript,html setlocal shiftwidth=2 tabstop=2 
+autocmd FileType javascript,typescript,html,c setlocal shiftwidth=2 tabstop=2 
 
-autocmd FileType go set foldmethod=manual
+autocmd FileType go set foldmethod=syntax
+
 autocmd FileType c,cpp set keywordprg=cppman
 autocmd FileType c,cpp nmap <F4> :YcmCompleter FixIt<CR>
 autocmd FileType javascript.jsx ALEDisable 
@@ -172,8 +184,13 @@ au BufRead,BufNewFile *.ts  setlocal filetype=typescript
 
 
 "*************** let commands ***************
-" Vim-Instant-Markdown 
 
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_root_markers = ['node_modules/', '.gitignore']
+" Go Fmt 
+let g:go_fmt_experimental = 1
+
+" Vim-Instant-Markdown 
 let g:instant_markdown_open_to_the_world = 0
 let g:instant_markdown_autostart = 0
 
@@ -187,12 +204,13 @@ let g:airline#extensions#ale#enabled = 1
 "let g:ale_fix_on_save = 1
 let g:ale_linters = {
 \   'javascript': ['jshint'],
-\		'typescript': ['standard'],
-\		'latex': []
+\		'typescript': ['tslint'],
+\		'latex': [],
+\		'python': []
 \}
 let g:ale_fixers = {
 \   'typescript': ['standard'],
-\   'javascript': ['eslint'],
+\   'javascript': ['tslint'],
 \}
 "let g:ale_linters_explicit = 1
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.php,*.js"
@@ -214,12 +232,17 @@ highlight ALEError ctermbg=Brown ctermfg=White
 "FOR YCM, to query the omni completion engine at each keypress. Might cause
 "stuttering
 "let g:ycm_cache_omnifunc = 1
+"
+let g:ycm_gocode_binary_path = "$GOPATH/bin/gocode"
+let g:ycm_godef_binary_path = "$GOPATH/bin/godef"
 "For YCM TO choose the default binary for python
 let g:ycm_seed_identifiers_with_syntax = 1 
 let g:ycm_min_num_identifier_candidate_chars = 5
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
 let g:ycm_python_binary_path = '/usr/bin/python3'
+let g:ycm_confirm_extra_conf = 0 
 let g:ycm_always_populate_location_list = 1
+let g:ycm_log_level = "debug" 
 let g:ycm_semantic_triggers =  {
   \   'c' : ['->', '.','re![_a-zA-Z0-9]'],
   \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
@@ -245,7 +268,7 @@ autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost    l* nested lwindow
 
 "Below option shows the method's signature while completion
-	"let g:tsuquyomi_completion_detail = 1
+	let g:tsuquyomi_completion_detail = 1
 	"autocmd FileType typescript setlocal completeopt+=menu,preview
 
 "Enable vim-airline
