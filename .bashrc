@@ -1,9 +1,57 @@
 # ~/.bashrc
-#
 
+source /usr/share/git/completion/git-prompt.sh
+# Set history to sync across terminals
+shopt -s histappend
+PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+
+# ---------------- Common Functions --------------
+
+git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/[\1]/'
+}
+
+# ------------------------------------------------
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 LANG="en_US.UTF-8"
+
+# ---------------- Color Mappings ----------------
+
+txtblk='\e[0;30m' # Black - Regular
+txtred='\e[0;31m' # Red
+txtgrn='\e[0;32m' # Green
+txtylw='\e[0;33m' # Yellow
+txtblu='\e[0;34m' # Blue
+txtpur='\e[0;35m' # Purple
+txtcyn='\e[0;36m' # Cyan
+txtwht='\e[0;37m' # White
+bldblk='\e[1;30m' # Black - Bold
+bldred='\e[1;31m' # Red
+bldgrn='\e[1;32m' # Green
+bldylw='\e[1;33m' # Yellow
+bldblu='\e[1;34m' # Blue
+bldpur='\e[1;35m' # Purple
+bldcyn='\e[1;36m' # Cyan
+bldwht='\e[1;37m' # White
+unkblk='\e[4;30m' # Black - Underline
+undred='\e[4;31m' # Red
+undgrn='\e[4;32m' # Green
+undylw='\e[4;33m' # Yellow
+undblu='\e[4;34m' # Blue
+undpur='\e[4;35m' # Purple
+undcyn='\e[4;36m' # Cyan
+undwht='\e[4;37m' # White
+bakblk='\e[40m'   # Black - Background
+bakred='\e[41m'   # Red
+bakgrn='\e[42m'   # Green
+bakylw='\e[43m'   # Yellow
+bakblu='\e[44m'   # Blue
+bakpur='\e[45m'   # Purple
+bakcyn='\e[46m'   # Cyan
+bakwht='\e[47m'   # White
+txtrst='\e[0m'    # Text Reset
+# ------------------------------------------------
 
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
@@ -21,12 +69,8 @@ BLINK=$(tput blink)
 REVERSE=$(tput smso)
 UNDERLINE=$(tput smul)
 
-# Set history to sync across terminals
-shopt -s histappend
-PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+# ------------------- Set PS1 --------------------
 
-#***********************************ALIASES***********************************
-alias ls='ls --color=auto'
 command -v ischroot 2>&1 > /dev/null
 if [ $? -eq 0 ]; then
 	ischroot 2>&1 >/dev/null
@@ -36,9 +80,11 @@ if [ $? -eq 0 ]; then
 		export PS1="\[\033[1;32m\]\w \[\033[1;33m\]\$\[\033[0m\]  "
 	fi
 else
-	export PS1="\[\033[1;32m\]\w \[\033[1;33m\]\$\[\033[0m\]  "
+	export PS1="${bldgrn}\w ${bldcyn}\$(git_branch) ${bldylw}\$ ${txtrst}"
 fi
 
+# -------------------- Aliases --------------------
+alias ls='ls --color=auto'
 alias n='nautilus .'
 alias k='cd .. && ls'
 alias kk='cd ../.. && ls'
@@ -65,28 +111,33 @@ alias grep="grep --color=auto"
 alias g="grep --color=auto -ri"
 alias hg="history | grep -P"
 alias ds="cd ~/git/ds"
-alias gvfs="cd ~/git/opensource/gvfs"
+alias less='less -m -N -g -i -J --underline-special --SILENT'
+alias y="yaourt --noconfirm"
 
-#***********************************GIT COMMANDS***********************************
+# ------------------- Git Aliases -------------------
+
 alias gs="git status"
 alias ga="git add"
 alias gc="git commit"
 alias gp="git push "
 alias gd="git diff "
+alias gg="git grep "
 alias gdc="git diff --cached "
 alias gla="git log --decorate --graph --all"
-alias less='less -m -N -g -i -J --underline-special --SILENT'
-alias y="yaourt --noconfirm"
 
-#***********************************EXPORTS***********************************
+# --------------------- Exports ---------------------
 
 export HISTFILESIZE=-1
 export HISTSIZE=-1
 export EDITOR=vim
 export TERMINAL=/usr/bin/terminator
 export HOME="/home/${USER}/"
-export PROMPT_DIRTRIM=3
-export JHBUILD="/mnt/data/jhbuild/checkout"
+
+# Set the depth to which PS1 shows the relative path
+export PROMPT_DIRTRIM=2
+export JHBUILD="/mnt/data/jhbuild"
+export LIBGDATA="/mnt/data/jhbuild/checkout/libgdata"
+export GVFS="/mnt/data/jhbuild/checkout/gvfs"
 
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 export LESS=" -R "
@@ -94,12 +145,8 @@ export LESS=" -R "
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:~/.local/bin:/bin/
 export PATH=$PATH:~/.npm-global/bin
 export J2D_D3D=false
-	
-export GOOGLE_APPLICATION_CREDENTIALS="/home/msharma/.ssh/sheets.json"
 
-export M5_PATH="/home/msharma/git/gem5/gemos"
-#export CC=gcc-6
-#export CXX=g++-6
+export GOOGLE_APPLICATION_CREDENTIALS="/home/msharma/.ssh/sheets.json"
 
 #export ANDROID_HOME=/opt/android-sdk
 #export PATH=$PATH:$ANDROID_HOME/emulator
@@ -121,17 +168,6 @@ export GVFS_DEBUG=1
 export LIBGDATA_DEBUG=2
 export GVFS_HTTP_DEBUG="all"
 export GVFS_SMB_DEBUG=1
-
-#export LC_ALL=de_DE.UTF-8
-#export LANG=de_DE.UTF-8
-#xrandr --output eDP1 --mode 1368x768 --pos 1920x0 --scale 1x1
-
-#dconf write /org/gnome/mutter/workspaces-only-on-primary false
-#dconf write /org/gnome/shell/overrides/workspaces-only-on-primary false
-#export JAVA_HOME=/usr/bin/jvm/default
-# tabtab source for electron-forge package
-# uninstall by removing these lines or running `tabtab uninstall electron-forge`
-#[ -f /home/msharma/.npm-global/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.bash ] && . /home/msharma/.npm-global/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.bash
 
 # added by travis gem
 [ -f /home/msharma/.travis/travis.sh ] && source /home/msharma/.travis/travis.sh
