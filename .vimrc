@@ -41,7 +41,7 @@
 	nnoremap 0 ^
 
 "Save with sudo
-	command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+	"command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 "Map move to end of word to w
 	map w e
 "Vim Surround mappings
@@ -60,6 +60,8 @@
 	vnoremap <C-c> "+y
 	vnoremap <C-v> "+p
 	nnoremap <C-v> "+p
+
+	nmap <F5> :call ToggleListChars()<CR>
 
 " Search for selected text, forwards or backwards.
 vnoremap <silent> * :<C-U>
@@ -121,37 +123,39 @@ vnoremap <silent> # :<C-U>
 	colorscheme neodark
 	set t_Co=256
 	set tabstop=4
-    set shiftwidth=4	"Number of spaces to use for autoindenting
-    set autoindent	    "Autoindenting always on
+	set shiftwidth=4	"Number of spaces to use for autoindenting
+	set autoindent	    "Autoindenting always on
 	set expandtab	    "Expands a <Tab> to 'tabstop' number of spaces
-    set copyindent	    "Copy Previous indent on autoindenting
-    set number
-    set showmatch	    "Show matching parenthesis
-    set smarttab	    "insert tabs on the start of a line according to shiftwidth, not tabstop
-    set hlsearch	    "highligh search terms
-    set incsearch	    "show search matches as you type
-    set backspace=indent,eol,start
-    set undolevels=1000
-    set history=1000	"History amount
-    set laststatus=2	"Always Display the status line
-    set timeoutlen=10	"Set the timeout for change from insert to normal mode
-    "change in vim airline
-    set directory^=$HOME/.vim/tmp// "To change the default save directory of swap files to .vim/tmp for better file management"
-    set encoding=utf-8
-    set cursorcolumn
-    set cursorline
-    set hidden
-    set splitbelow
-    set foldmethod=indent
-    set foldnestmax=2
-    set wildmenu
-    "set listchars=tab:\¦\
-    set mouse=a     "Enable scrolling with mouse - useful for X sessions only
-    set shortmess+=c
-    set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o,*.a     " MacOSX/Linux
-    set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-    set exrc        "Project specific .vimrc files
-    set secure      "Disallows execution of autocmd and write commands in Project specific .vimrc
+	set copyindent	    "Copy Previous indent on autoindenting
+	set number
+	set showmatch	    "Show matching parenthesis
+	set smarttab	    "insert tabs on the start of a line according to shiftwidth, not tabstop
+	set hlsearch	    "highligh search terms
+	set incsearch	    "show search matches as you type
+	set backspace=indent,eol,start
+	set undolevels=1000
+	set history=1000	"History amount
+	set laststatus=2	"Always Display the status line
+	set timeoutlen=10	"Set the timeout for change from insert to normal mode
+	"change in vim airline
+	set directory^=$HOME/.vim/tmp// "To change the default save directory of swap files to .vim/tmp for better file management"
+	set encoding=utf-8
+	"set cursorcolumn
+	"set cursorline
+	set hidden
+	set splitbelow
+	set foldmethod=indent
+	set foldnestmax=3
+	set wildmenu
+	set mouse=a     "Enable scrolling with mouse - useful for X sessions only
+	set shortmess+=c
+	set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o,*.a     " MacOSX/Linux
+	set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+	set secure      "Disallows execution of autocmd and write commands in Project specific .vimrc
+	set exrc        "Project specific .vimrc files
+	set listchars=tab:▸.
+	set diffopt+=iwhite
+	set tags=./tags;
 	"setlocal cinoptions=>4,n-2,{2,^-2,:2,=2,g0,h2,p5,t0,+2,(0,u0,w1,m1 "https://gcc.gnu.org/wiki/FormattingCodeForGCC
 
 
@@ -177,18 +181,17 @@ autocmd BufReadPost  *.js  nnoremap <buffer> K :TernDoc<CR>
 "autocmd FileType typescript syn clear foldBraces 
 
 autocmd FileType tex setlocal
-autocmd FileType python nmap <F5> :w <CR> :!python3 %<CR>
-autocmd FileType sh nmap <F5> :w <CR> :!./%<CR>
-autocmd FileType c nmap <F5> :!clear;gcc -g % -lpthread && ./a.out<CR>
-autocmd FileType cpp nmap <F5> :!clear<CR> :!g++ -g -std=c++11 % && ./a.out<CR>
-autocmd FileType tex nmap <F5> :!latexmk -pdf -pdflatex=xelatex ./cv.pdf<CR>
+" autocmd FileType python nmap <F5> :w <CR> :!python3 %<CR>
+" autocmd FileType sh nmap <F5> :w <CR> :!./%<CR>
+" autocmd FileType c nmap <F5> :!clear;gcc -g % -lpthread && ./a.out<CR>
+" autocmd FileType cpp nmap <F5> :!clear<CR> :!g++ -g -std=c++11 % && ./a.out<CR>
+" autocmd FileType tex nmap <F5> :!latexmk -pdf -pdflatex=xelatex ./cv.pdf<CR>
 au BufRead,BufNewFile *.ts  setlocal filetype=typescript
 
 
 "*************** let commands ***************
-
-let g:prettier#config#print_width = 120
-let g:prettier#exec_cmd_async = 1
+" Add an extra space before comments
+let NERDSpaceDelims=1
 
 " Ctrl P Settings
 let g:ctrlp_working_path_mode = 'ra'
@@ -302,7 +305,6 @@ let g:airline#extensions#tabline#right_alt_sep = ''
 
 let g:airline_theme='wombat'
 
-
 let g:SuperTabDefaultCompletionType = "context"
 
 "Vim-Multiple Cursors Configuration
@@ -318,25 +320,17 @@ let g:NERDAltDelims_cpp = 1
 let g:NERDCompactSexyComs = 1
 let g:NERDToggleSexyComments = 1
 
-"netrw Settings to make it like NERDTree
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 30
-"Hides swp files
-let g:netrw_list_hide= '.*\.swp$'
-"let g:netrw_list_hide= '.*\.swo$'
-
-"Automatically open Vexplore at startup and shift focus
-augroup ProjectDrawer
-	"autocmd VimEnter * wincmd p
-	"autocmd VimEnter * command W wq | q!
-	"autocmd VimEnter * command W! wq! | q!
-	"autocmd VimEnter * command Q! q! | q!
-	autocmd VimEnter * command Q q | q!
-augroup END
-
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 " Show trailing whitespace and spaces before a tab:
 :match ExtraWhitespace /\s\+$\| \+\ze\t/
+
+autocmd FileType netrw setl bufhidden=wipe
+
+" Custom function to toggle listchars (specifically for tab)
+function! ToggleListChars()
+    if &list
+       set nolist
+    else
+       set list
+    endif
+endfunction
