@@ -6,7 +6,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/opt/grep/libexec/gnubin:/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/m0s04cr/.oh-my-zsh"
@@ -75,7 +75,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -110,11 +110,12 @@ source /usr/local/opt/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # -------------------- Aliases --------------------
-alias ls='ls'
+alias ls='ls -G '
 alias n='open .'
 alias k='cd .. && ls'
 alias kk='cd ../.. && ls'
 alias kkk='cd ../../.. && ls'
+alias kkkk='cd ../../../.. && ls'
 alias la='ls -la'
 alias f="find ./ -name "
 #alias pac="pacman -S"
@@ -127,9 +128,10 @@ alias y="yaourt --noconfirm"
 
 # ------------------- Git Aliases -------------------
 
-alias gs="git status"
-alias ga="git add"
-alias gc="git commit"
+alias gs="git status "
+alias ga="git add "
+alias gc="git checkout "
+alias gcm="git commit "
 alias gp="git push "
 alias gd="git diff "
 alias gg="git grep "
@@ -137,9 +139,13 @@ alias gdc="git diff --cached "
 alias gla="git log --decorate --graph --all"
 
 # --------------------- Exports ---------------------
+#
+alias vlc="/Applications/VLC.app/Contents/MacOS/VLC"
+SAVEHIST=10000000
+HISTFILE=~/.zsh_history
 
-export HISTFILESIZE=-1
-export HISTSIZE=-1
+export HISTFILESIZE=1000000
+export HISTSIZE=10000000
 export EDITOR=vim
 
 # Set the depth to which PS1 shows the relative path
@@ -147,6 +153,24 @@ export PROMPT_DIRTRIM=2
 export JHBUILD="/mnt/data/jhbuild"
 export LIBGDATA="/mnt/data/jhbuild/checkout/libgdata"
 export GVFS="/mnt/data/jhbuild/checkout/gvfs"
+export GOPATH="$HOME/go"
 
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
 export LESS=" -R "
+
+export JAVA_HOME="`/usr/libexec/java_home -v 1.8`"
+
+# NVM related setup
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# --------------------- Plugins Config ---------------------
+bindkey "^[[A" history-substring-search-up
+bindkey "^[[B" history-substring-search-down
+
+setopt noautomenu
+setopt nomenucomplete
+#sledge:binary path
+export SLEDGE_BIN=/Users/m0s04cr/.sledge/bin
+export PATH="${PATH}:${SLEDGE_BIN}"

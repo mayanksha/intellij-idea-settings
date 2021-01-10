@@ -17,7 +17,7 @@
 	nnoremap C :call NERDComment('n', 'NormalToggle')<CR>
 	vnoremap C :call NERDComment('x', 'NormalToggle')<CR>
 "nmap <Leader> <leader>c<space>
-	noremap <NUL> :bn<CR>
+	noremap <C-Space> :bn<CR>
 	nnoremap <C-B> :bp<CR>
 	nnoremap <F2> :bd<CR>
 	nnoremap <C-e> :call CloseBufWithoutClosingNetrw()<CR>
@@ -92,7 +92,7 @@ vnoremap <silent> # :<C-U>
 	Plugin 'alvan/vim-closetag'
 	Plugin 'terryma/vim-multiple-cursors'
 	Plugin 'Valloric/YouCompleteMe'
-	Plugin 'scrooloose/NERDCommenter'
+	Plugin 'mayanksha/nerdcommenter'
 	Plugin 'Quramy/vim-js-pretty-template'
 	Plugin 'vim-utils/vim-man'
 	Plugin 'leafgarland/typescript-vim'
@@ -109,6 +109,8 @@ vnoremap <silent> # :<C-U>
     "Plugin 'prettier/vim-prettier', {
                 "\ 'do': 'yarn install',
                 "\ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+    " Java specific plugins
+    Plugin 'artur-shaik/vim-javacomplete2'
 	" All of your Plugins must be added before the following line
 	call vundle#end()            " required
 	filetype plugin indent on    " required
@@ -144,6 +146,7 @@ vnoremap <silent> # :<C-U>
 	"set cursorline
 	set hidden
 	set splitbelow
+	set nofoldenable    "Open all the folds at the time of opening a file
 	set foldmethod=indent
 	set foldnestmax=3
 	set wildmenu
@@ -165,9 +168,10 @@ vnoremap <silent> # :<C-U>
 filetype plugin indent on	"Turns the filetype plugin on
 "autocmd FileType html set omnifunc=htmlcomplete#CompleteTags	"Autocompletes HTML tags
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript,typescript,html setlocal shiftwidth=2 tabstop=2 
+autocmd FileType javascript,typescript,html,json setlocal shiftwidth=2 tabstop=2
 
 autocmd FileType go set foldmethod=syntax
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
 autocmd FileType c,cpp set keywordprg=cppman
 autocmd FileType c,cpp nmap <F4> :YcmCompleter FixIt<CR>
@@ -175,8 +179,6 @@ autocmd FileType javascript.jsx ALEDisable
 autocmd FileType javascript,typescript nmap <F4> :ALEFix <CR>
 autocmd FileType typescript nnoremap <C-]> :ALEGoToDefinition <CR>
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType javascript JsPreTmpl markdown
-autocmd FileType typescript JsPreTmpl markdown
 autocmd BufReadPost  *.js  nnoremap <buffer> K :TernDoc<CR>
 "autocmd FileType typescript syn clear foldBraces 
 
@@ -196,7 +198,7 @@ let NERDSpaceDelims=1
 " Ctrl P Settings
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_root_markers = ['node_modules/', '.git/']
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|ico|git|svn))$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist|DS_Store|venv)|(\.(swp|ico|git|svn|html))$'
 
 " Go Fmt 
 let g:go_fmt_experimental = 1
@@ -250,19 +252,18 @@ let g:ycm_godef_binary_path = "$GOPATH/bin/godef"
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_min_num_identifier_candidate_chars = 5
 let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
-let g:ycm_python_binary_path = '/usr/bin/python3'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_always_populate_location_list = 1
 let g:ycm_log_level = "debug"
 let g:ycm_semantic_triggers =  {
-  \   'c' : ['->', '.','re![_a-zA-Z0-9]'],
+  \   'c,python' : ['->', '.','re![_a-zA-Z0-9]'],
   \   'objc' : ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
   \             're!\[.*\]\s'],
   \   'ocaml' : ['.', '#'],
   \   'cpp,objcpp' : ['->', '.', '::', 're![_a-zA-Z0-9]'],
   \   'perl' : ['->'],
   \   'php' : ['->', '::'],
-  \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+  \   'cs,java,javascript,typescript,d,perl6,scala,vb,elixir,go' : ['.'],
   \   'ruby' : ['.', '::'],
   \   'lua' : ['.', ':'],
   \   'erlang' : [':'],
@@ -333,4 +334,9 @@ function! ToggleListChars()
     else
        set list
     endif
+endfunction
+
+" Custom function to format (pretty print) a json file
+function! FormatJSON()
+    :%!python -m json.tool
 endfunction
